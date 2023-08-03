@@ -1,17 +1,17 @@
--- Создание процедуры dbo.usp_MakeFamilyPurchase
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГЇГ°Г®Г¶ГҐГ¤ГіГ°Г» dbo.usp_MakeFamilyPurchase
 CREATE PROCEDURE dbo.usp_MakeFamilyPurchase
     @FamilySurName VARCHAR(255)
 AS
 BEGIN
-    -- Обновление данных в таблице dbo.Family
+    -- ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г¤Г Г­Г­Г»Гµ Гў ГІГ ГЎГ«ГЁГ¶ГҐ dbo.Family
     UPDATE dbo.Family
     SET BudgetValue = BudgetValue - (SELECT SUM(Value) FROM dbo.Basket WHERE dbo.Family.SurName = @FamilySurName)
     WHERE SurName = @FamilySurName;
 
-    -- Проверка наличия семьи в таблице dbo.Family
+    -- ГЏГ°Г®ГўГҐГ°ГЄГ  Г­Г Г«ГЁГ·ГЁГї Г±ГҐГ¬ГјГЁ Гў ГІГ ГЎГ«ГЁГ¶ГҐ dbo.Family
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR('Ошибка: Семьи с указанной фамилией не существует!', 16, 1);
+        RAISERROR('Error: This family does not exist!', 16, 1);
         RETURN;
     END;
 END;
